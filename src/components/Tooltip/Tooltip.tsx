@@ -47,8 +47,9 @@ const arrowVariants = cva("absolute w-2 h-2 rotate-45", {
   },
 });
 
+// FIX 1: Used Omit to remove the default HTML "content" attribute
 export interface TooltipProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "content">,
     VariantProps<typeof tooltipVariants> {
   content: React.ReactNode;
   children: React.ReactNode;
@@ -71,7 +72,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
     ref
   ) => {
     const [isVisible, setIsVisible] = useState(false);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    
+    // FIX 2: Replaced NodeJS.Timeout with ReturnType<typeof setTimeout> for browser compatibility
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const showTooltip = () => {
       if (delay > 0) {
