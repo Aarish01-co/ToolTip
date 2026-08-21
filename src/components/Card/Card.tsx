@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/libs/utils";
@@ -37,7 +37,7 @@ const cardVariants = cva(
 
 interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {
+  VariantProps<typeof cardVariants> {
   asChild?: boolean;
   title?: string;
   description?: string;
@@ -117,8 +117,8 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       ratio === "16:9"
         ? "aspect-video"
         : ratio === "4:3"
-        ? "aspect-[4/3]"
-        : "aspect-square";
+          ? "aspect-[4/3]"
+          : "aspect-square";
 
     return (
       <Comp
