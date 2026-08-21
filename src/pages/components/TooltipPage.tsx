@@ -1,9 +1,19 @@
+import React from "react";
 import { Tooltip } from "@/components/Tooltip/Tooltip";
 import { Button } from "@/components/Button/Button";
-import ComponentDemo from "../ComponentsDemo";
+import ComponentDemo from "../ComponentsDemo"; // Consider updating to "@/components/ComponentsDemo"
 import PropsTable from "@/components/Personal/PropsTable";
 
-const TooltipPage = () => {
+// 1. Define the type for your PropsTable data
+interface PropsTableData {
+  prop: string;
+  type: string;
+  default: string;
+  description: string;
+}
+
+// 2. Type the main component as React.FC
+const TooltipPage: React.FC = () => {
   const positionsUsageCode = `import { Tooltip } from "@/components/Tooltip/Tooltip";
 import { Button } from "@/components/Button/Button";
 
@@ -53,7 +63,8 @@ import { Button } from "@/components/Button/Button";
   <Button variant="primary">Delayed (500ms)</Button>
 </Tooltip>`;
 
-  const propsData = [
+  // 3. Apply the interface to the array
+  const propsData: PropsTableData[] = [
     {
       prop: "content",
       type: "ReactNode",
