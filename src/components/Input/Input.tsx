@@ -3,8 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/libs/utils";
 
 const inputVariants = cva(
-  "w-full rounded-md focus:outline-none shadow-sm transition-all duration-150 bg-white placeholder:text-gray-400",
-  // w-full bg-transparent border-b border-gray-500 pb-2 pt-6 focus:outline-none transition-all
+  "w-full rounded-md border focus:outline-none shadow-sm transition-all duration-150 bg-white placeholder:text-gray-400",
   {
     variants: {
       size: {
@@ -33,13 +32,16 @@ const inputVariants = cva(
 );
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      "size" | "disabled"
+    >,
     VariantProps<typeof inputVariants> {
   label?: string;
   hint?: string;
   error?: string;
   id?: string;
-  size?: "sm" | "md" | "lg";
+  disabled?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -50,19 +52,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       error,
       className,
       size = "md",
-      tone,
-      disabled,
+      tone = "default",
+      disabled = false,
       id,
       ...props
     },
     ref
   ) => {
-    const inputId =
-      id ||
-      React.useId?.() ||
-      `input-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = React.useId();
+    const inputId = id ?? generatedId;
+
     return (
-      <div className="flex flex-col gap-1 w-full">
+      <div className="flex w-full flex-col gap-1">
         {label && (
           <label
             htmlFor={inputId}
@@ -71,13 +72,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
+
         <input
           id={inputId}
           ref={ref}
-          className={cn(inputVariants({ size, tone, disabled }), className)}
           disabled={disabled}
+          className={cn(
+            inputVariants({
+              size,
+              tone,
+              disabled,
+            }),
+            className
+          )}
           {...props}
         />
+
         {error ? (
           <p className="text-sm text-red-500">{error}</p>
         ) : hint ? (
@@ -89,4 +99,5 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = "Input";
+
 export { Input, inputVariants };
